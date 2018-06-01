@@ -4,7 +4,7 @@ import './App.css'
 
 import Navbar from './components/Navbar/Navbar'
 import Modal from './components/Modal/Modal'
-import HomeContainer from './containers/Home/Home'
+import MyDriveContainer from './containers/MyDrive/MyDrive'
 import TrashContainer from './containers/Trash/Trash'
 
 import New from './img/new.jpg'
@@ -15,23 +15,24 @@ import Trash from './img/trash.jpg'
 class App extends Component {
   state = {
     links: [
-      { name: 'Home', url: '/' },
-      // { name: 'DriveStorage', url: '/driveStorage' },
-      { name: 'Trash', url: '/trash' },
+      { name: 'DriveStorage', url: '/', title: 'DriveStorage', image: StorageDrive },
       {
         name: 'New',
         dataToggle: 'modal',
         dataTarget: '#newModal',
-        url: '#newModal'
-      }
+        url: '#newModal',
+        title: 'NEW',
+        image: New
+      },
+      { name: 'MyDrive', url: '/', title: 'My Drive', image: MyDrive },
+      { name: 'Trash', url: '/trash', title: 'Trash', image: Trash }
     ],
-
-    buttons: [
-      { title: 'DriveStorage', image: StorageDrive },
-      { title: 'NEW', image: New },
-      { title: 'My Drive', image: MyDrive },
-      { title: 'Trash', image: Trash }
+    modalButtons: [
+      { name: 'Folder' },
+      { name: 'File' }
     ]
+
+
   }
   render() {
     return (
@@ -41,13 +42,13 @@ class App extends Component {
             style={{ width: "90%", height: "700px" }}>
             <Navbar
               links={Object.values(this.state.links)}
-              buttons={Object.values(this.state.buttons)}
+            // buttons={Object.values(this.state.buttons)}
             />
-            {/*<Modal /> */}
+            <Modal />
             <Switch>
               {/* <Route path='/driveStorage' component={HomeContainer} /> */}
               <Route path='/trash' component={TrashContainer} />
-              <Route path='/' component={HomeContainer} />
+              <Route path='/' component={MyDriveContainer} />
             </Switch>
           </div>
         </div>

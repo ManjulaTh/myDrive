@@ -4,14 +4,18 @@ import NavPill from './NavPill/NavPill'
 class Navbar extends Component {
     render() {
         return (
-            <div className="float-sm-left">
-                <nav className="navbar bg-light  w-25">
+            <div className="container float-sm-left ">
+                <nav className="navbar bg-light  w-25 justify-content-center">
                     <div className="d-flex flex-column h-25">
 
-                        {this.props.buttons.map(button => (
+                        {this.props.links.map(link => (
                             <NavPill
-                                title={button.title}
-                                image={button.image}
+                                name={link.name}
+                                title={link.title}
+                                image={link.image}
+                                url={link.url}
+                                dataToggle={link.dataToggle}
+                                dataTarget={link.dataTarget}
                             />
                         ))}
                     </div>
