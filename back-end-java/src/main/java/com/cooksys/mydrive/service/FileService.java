@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class FileService {
 		if (fileOptional.isPresent()) {
 			FileModel file = fileOptional.get();
 			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
 					.body(file.getContent());
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
