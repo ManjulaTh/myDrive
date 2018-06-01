@@ -32,21 +32,32 @@ class App extends Component {
   }
 
   fileDownloadHander = () => {
-    // axios.get(`http://localhost:8080/api/file/${this.state.selectedFileDownload}`, { responseType: 'arraybuffer'})
     axios({
       url: `http://localhost:8080/api/files/${this.state.selectedFileDownload}`,
       method: 'GET',
       responseType: 'blob'
     })
       .then(response => {
-        console.log(response)
         const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'file.txt');
-        document.body.appendChild(link);
-        link.click();
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', this.grabFileNameFromContentDisposition(response.headers))
+        document.body.appendChild(link)
+        link.click()
       })
+  }
+
+  grabFileNameFromContentDisposition = header => {
+    var filename = "";
+    var disposition = header['content-disposition']
+    if (disposition && disposition.indexOf('attachment') !== -1) {
+        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+        var matches = filenameRegex.exec(disposition)
+        if (matches != null && matches[1]) { 
+          filename = matches[1].replace(/['"]/g, '')
+        }
+    }
+    return filename
   }
 
   render() {

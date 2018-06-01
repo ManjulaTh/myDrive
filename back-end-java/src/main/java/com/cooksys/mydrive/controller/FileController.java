@@ -28,6 +28,7 @@ public class FileController {
 		return fileService.getAll();
 	}
 	
+	@CrossOrigin(exposedHeaders = "content-disposition")
 	@GetMapping("/{id}")
 	public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
 		return fileService.getFile(id);
