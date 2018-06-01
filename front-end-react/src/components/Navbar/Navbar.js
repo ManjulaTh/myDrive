@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Button from './Button/Button'
+import NavPill from './NavPill/NavPill'
 
 class Navbar extends Component {
     render() {
@@ -9,7 +9,7 @@ class Navbar extends Component {
                     <div className="d-flex flex-column h-25">
 
                         {this.props.buttons.map(button => (
-                            <Button
+                            <NavPill
                                 title={button.title}
                                 image={button.image}
                             />
