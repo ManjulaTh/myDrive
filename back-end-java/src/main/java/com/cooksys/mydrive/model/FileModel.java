@@ -2,13 +2,16 @@ package com.cooksys.mydrive.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class FileModel {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	private String name;
@@ -44,6 +47,7 @@ public class FileModel {
 		this.name = name;
 	}
 
+	@JsonIgnore
 	public String getMimetype() {
 		return mimetype;
 	}
@@ -52,6 +56,7 @@ public class FileModel {
 		this.mimetype = mimetype;
 	}
 
+	@JsonIgnore
 	public byte[] getContent() {
 		return content;
 	}

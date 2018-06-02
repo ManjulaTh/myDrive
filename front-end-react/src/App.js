@@ -1,11 +1,27 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DownloadIcon from '@material-ui/icons/FileDownload'
 
 class App extends Component {
 
   state = {
-    selectedFileUpload: null,
-    selectedFileDownload: null,
+    files: [],
+    selectedFileUpload: null
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:8080/api/files/all')
+      .then(response => { 
+        this.setState({files: response.data}) 
+      })
   }
 
   selectedFileUploadHandler = event => {
@@ -21,19 +37,17 @@ class App extends Component {
       "Content-Type": "multipart/form-data"
     })
       .then(response => {
-        console.log(response)
+        this.fileInput.value = null
+        this.setState({
+          selectedFileUpload: null,
+          files: [...this.state.files, response.data] 
+        })
       })
   }
 
-  selectedFileDownloadHandler = event => {
-    this.setState({
-      selectedFileDownload: event.target.value
-    })
-  }
-
-  fileDownloadHander = () => {
+  fileDownloadHandler = (id) => {
     axios({
-      url: `http://localhost:8080/api/files/${this.state.selectedFileDownload}`,
+      url: `http://localhost:8080/api/files/${id}`,
       method: 'GET',
       responseType: 'blob'
     })
@@ -60,16 +74,54 @@ class App extends Component {
     return filename
   }
 
+  fileDeleteHandler = (id) => {
+    axios.delete(`http://localhost:8080/api/files/${id}`)
+      .then(response => {
+        this.setState({ files: this.state.files.filter((elem) => elem["id"] !== id) })
+      }
+    )
+  }
+
   render() {
     return (
       <div className="App">
-        <div className="upload">
-          <input type="file" onChange={this.selectedFileUploadHandler}/>
-          <button onClick={this.fileUploadHandler}>Upload</button>
+        <div className="upload" style={{ padding: '1em' }} >
+          <input id="raised-button-file" type="file" onChange={this.selectedFileUploadHandler} ref={ref=> this.fileInput = ref} />
+          <Button variant="raised" onClick={this.fileUploadHandler}>Upload</Button>
         </div>
-        <div className="download">
-          <input type="text" onChange={this.selectedFileDownloadHandler}/>
-          <button onClick={this.fileDownloadHander}>Download</button>
+        <div className="all">
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell numeric>ID</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Delete</TableCell>
+                <TableCell>Download</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.files.map(n => {
+                return (
+                  <TableRow hover key={n.id}>
+                    <TableCell numeric>
+                      {n.id}
+                    </TableCell>
+                    <TableCell>
+                      {n.name}
+                    </TableCell>
+                    <TableCell>
+                      <DeleteIcon onClick={() => this.fileDeleteHandler(n.id)}/>
+                    </TableCell>
+                    <TableCell>
+                      <DownloadIcon onClick={() => this.fileDownloadHandler(n.id)}/>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Paper>
         </div>
       </div>
     )

@@ -48,10 +48,19 @@ public class FileService {
 		try {
 			FileModel fileTemp = new FileModel(file.getOriginalFilename(), file.getContentType(), file.getBytes(), false);
 			fileRepository.save(fileTemp);
-			return ResponseEntity.ok(fileTemp.getId());
+			return ResponseEntity.ok(fileTemp);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	public ResponseEntity<?> deleteFile(Long id) {
+		Optional<FileModel> fileOptional = fileRepository.findById(id);
+		if (fileOptional.isPresent()) {
+			fileRepository.deleteById(id);
+			return ResponseEntity.ok(id);
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 }
