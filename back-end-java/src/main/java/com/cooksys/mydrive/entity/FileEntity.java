@@ -1,4 +1,4 @@
-package com.cooksys.mydrive.model;
+package com.cooksys.mydrive.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class FileModel {
+public class FileEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +22,9 @@ public class FileModel {
 	
 	private Boolean trash;
 	
-	public FileModel() {}
+	public FileEntity() {}
 
-	public FileModel(String name, String mimetype, byte[] content, Boolean trash) {
+	public FileEntity(String name, String mimetype, byte[] content, Boolean trash) {
 		this.name = name;
 		this.mimetype = mimetype;
 		this.content = content;
@@ -89,7 +89,7 @@ public class FileModel {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FileModel other = (FileModel) obj;
+		FileEntity other = (FileEntity) obj;
 		if (id != other.id)
 			return false;
 		return true;

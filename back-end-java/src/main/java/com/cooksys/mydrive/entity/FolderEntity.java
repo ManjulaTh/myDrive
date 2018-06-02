@@ -1,11 +1,11 @@
-package com.cooksys.mydrive.model;
+package com.cooksys.mydrive.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class FolderModel {
+public class FolderEntity {
 
 	@Id
 	@GeneratedValue
@@ -15,5 +15,5 @@ public class FolderModel {
 	
 	private Boolean trash;
 	
-	public FolderModel() {}
+	public FolderEntity() {}
 }

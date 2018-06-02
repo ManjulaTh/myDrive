@@ -31,18 +31,20 @@ class App extends Component {
   }
 
   fileUploadHandler = () => {
-    const formData = new FormData()
-    formData.append("file", this.state.selectedFileUpload)
-    axios.post('http://localhost:8080/api/files/create', formData, {
-      "Content-Type": "multipart/form-data"
-    })
-      .then(response => {
-        this.fileInput.value = null
-        this.setState({
-          selectedFileUpload: null,
-          files: [...this.state.files, response.data] 
-        })
+    if (this.state.selectedFileUpload) {
+      const formData = new FormData()
+      formData.append("file", this.state.selectedFileUpload)
+      axios.post('http://localhost:8080/api/files/create', formData, {
+        "Content-Type": "multipart/form-data"
       })
+        .then(response => {
+          this.fileInput.value = null
+          this.setState({
+            selectedFileUpload: null,
+            files: [...this.state.files, response.data] 
+          })
+        })
+    }
   }
 
   fileDownloadHandler = (id) => {
