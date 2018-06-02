@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cooksys.mydrive.model.FileModel;
+import com.cooksys.mydrive.entity.FileEntity;
 import com.cooksys.mydrive.repository.FileRepository;
 
 @Service
@@ -24,16 +24,16 @@ public class FileService {
 	}
 
 	public ResponseEntity<?> getAll() {
-		List<FileModel> list = new ArrayList<>();
-		Iterable<FileModel> files = fileRepository.findAll();
+		List<FileEntity> list = new ArrayList<>();
+		Iterable<FileEntity> files = fileRepository.findAll();
 		files.forEach(list::add);
 		return ResponseEntity.ok(list);
 	}
 
 	public ResponseEntity<byte[]> getFile(Long id) {
-		Optional<FileModel> fileOptional = fileRepository.findById(id);
+		Optional<FileEntity> fileOptional = fileRepository.findById(id);
 		if (fileOptional.isPresent()) {
-			FileModel file = fileOptional.get();
+			FileEntity file = fileOptional.get();
 			return ResponseEntity.ok()
 					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
 					.contentLength(file.getContent().length)
@@ -46,7 +46,7 @@ public class FileService {
 
 	public ResponseEntity<?> createFile(MultipartFile file) {
 		try {
-			FileModel fileTemp = new FileModel(file.getOriginalFilename(), file.getContentType(), file.getBytes(), false);
+			FileEntity fileTemp = new FileEntity(file.getOriginalFilename(), file.getContentType(), file.getBytes(), false);
 			fileRepository.save(fileTemp);
 			return ResponseEntity.ok(fileTemp);
 		} catch (Exception e) {
@@ -55,7 +55,7 @@ public class FileService {
 	}
 
 	public ResponseEntity<?> deleteFile(Long id) {
-		Optional<FileModel> fileOptional = fileRepository.findById(id);
+		Optional<FileEntity> fileOptional = fileRepository.findById(id);
 		if (fileOptional.isPresent()) {
 			fileRepository.deleteById(id);
 			return ResponseEntity.ok(id);
