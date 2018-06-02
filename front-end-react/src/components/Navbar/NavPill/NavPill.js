@@ -1,6 +1,7 @@
 import React from 'react'
 import classes from './NavPill.css'
 
+
 const NavPill = props => {
     let cName
     let border
@@ -36,8 +37,7 @@ const NavPill = props => {
                 style={{ borderRadius: "25px" }}
                 href={props.url}
                 exact
-                data-target={props.dataTarget}
-                data-toggle={props.dataToggle}
+
             >
                 <img style={{ height: "30px", width: "30px" }} src={`${props.image}`} />
                 <h6 className="m-1 text-dark">{props.title}</h6>

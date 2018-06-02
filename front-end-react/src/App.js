@@ -6,6 +6,7 @@ import Navbar from './components/Navbar/Navbar'
 import Modal from './components/Modal/Modal'
 import MyDriveContainer from './containers/MyDrive/MyDrive'
 import TrashContainer from './containers/Trash/Trash'
+import MenuContainer from './containers/Menu/Menu'
 
 import New from './img/new.jpg'
 import MyDrive from './img/myDrive.png'
@@ -18,9 +19,7 @@ class App extends Component {
       { name: 'DriveStorage', url: '/', title: 'DriveStorage', image: StorageDrive },
       {
         name: 'New',
-        dataToggle: 'modal',
-        dataTarget: '#newModal',
-        url: '#newModal',
+        url: '/Menu',
         title: 'NEW',
         image: New
       },
@@ -42,13 +41,13 @@ class App extends Component {
             style={{ width: "90%", height: "700px" }}>
             <Navbar
               links={Object.values(this.state.links)}
-            // buttons={Object.values(this.state.buttons)}
             />
-            <Modal />
+
             <Switch>
-              {/* <Route path='/driveStorage' component={HomeContainer} /> */}
-              <Route path='/trash' component={TrashContainer} />
+              <Route path='/driveStorage' component={MyDriveContainer} />
+              <Route path='/Menu' component={MenuContainer} />
               <Route path='/' component={MyDriveContainer} />
+              <Route path='/trash' component={TrashContainer} />
             </Switch>
           </div>
         </div>
