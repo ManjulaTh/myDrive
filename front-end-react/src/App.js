@@ -7,8 +7,10 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
-import DownloadIcon from '@material-ui/icons/FileDownload'
+import DownloadIcon from '@material-ui/icons/FileDownload';
+import UploadIcon from '@material-ui/icons/FileUpload';
 
 class App extends Component {
 
@@ -87,10 +89,18 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="upload" style={{ padding: '1em' }} >
-          <input id="raised-button-file" type="file" onChange={this.selectedFileUploadHandler} ref={ref=> this.fileInput = ref} />
-          <Button variant="raised" onClick={this.fileUploadHandler}>Upload</Button>
-        </div>
+        <Paper className="fileContainer">
+          <div className="fileUploadContainer" style={{ padding: '1em' }} >
+            <input type="file" onChange={this.selectedFileUploadHandler} ref={ref=> this.fileInput = ref} />
+            <Button variant="raised" onClick={this.fileUploadHandler}>Upload File</Button>
+          </div>
+        </Paper>
+        <Paper className="folderContainer">
+          <div className="folderUploadContainer" style={{ padding: '1em' }} >
+            <TextField placeholder="Folder Name" onChange={this.selectedFolderUploadHandler} value={this.state.folderInput} />
+            <UploadIcon onClick={this.folderUploadHandler}/>
+          </div>
+        </Paper>
         <div className="all">
         <Paper>
           <Table>
