@@ -15,7 +15,7 @@ class Navbar extends Component {
                                 image={link.image}
                                 url={link.url}
                                 // dataToggle={link.dataToggle}
-                                dataTarget={link.dataTarget}
+                                Target={link.Target}
                             />
                         ))}
                     </div>

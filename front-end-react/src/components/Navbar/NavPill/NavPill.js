@@ -37,7 +37,7 @@ const NavPill = props => {
                 style={{ borderRadius: "25px" }}
                 href={props.url}
                 exact
-
+                Target={props.Target}
             >
                 <img style={{ height: "30px", width: "30px" }} src={`${props.image}`} />
                 <h6 className="m-1 text-dark">{props.title}</h6>
