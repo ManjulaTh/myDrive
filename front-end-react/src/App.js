@@ -27,10 +27,36 @@ class App extends Component {
       },
       { name: 'MyDrive', url: '/', title: 'My Drive', image: MyDrive, pillId: 'MyDrivePill' },
       { name: 'Trash', url: '/trash', title: 'Trash', image: Trash, pillId: 'TrashPill' }
+    ],
+    folders: [
+      {
+        folderName: 'FolderName',
+        folderId: '',
+        trash: false,
+        files: [{
+          fileName: 'FileName',
+          fileId: '',
+          trash: false,
+          folderId: ''
+        }]
+      },
+      {
+        folderName: 'DeletedFolderName',
+        folderId: '',
+        trash: true,
+        files: [{
+          fileName: 'DeletedFileName',
+          fileId: '',
+          trash: true,
+          folderId: ''
+        }]
+      }
     ]
 
-
   }
+
+
+
 
   render() {
     return (
@@ -46,10 +72,10 @@ class App extends Component {
               {/* <Route path='/driveStorage' component={HomeContainer} /> */}
               <Route
                 path='/trash'
-                render={() => <TrashContainer section='trash' />}
+                render={() => <TrashContainer folders={this.state.folders} />}
               /><Route
                 path='/'
-                render={() => <MyDriveContainer section='myDrive' />}
+                render={() => <MyDriveContainer folders={this.state.folders} />}
               />
             </Switch>
           </div>

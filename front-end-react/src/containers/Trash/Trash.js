@@ -17,7 +17,8 @@ class Trash extends Component {
         section = (
             <Fragment>
                 <SectionHeader section='trash' buttonIcons={this.state.buttonIcons} />
-                <SectionBody />
+
+                <SectionBody section='trash' folders={this.props.folders} />
             </Fragment>
         )
 

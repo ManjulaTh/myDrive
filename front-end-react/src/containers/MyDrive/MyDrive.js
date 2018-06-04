@@ -13,12 +13,12 @@ class MyDrive extends Component {
     }
     render() {
         let section = 'Loading...'
-
+        { console.log() }
 
         section = (
             <Fragment>
                 <SectionHeader section='myDrive' buttonIcons={this.state.buttonIcons} />
-                <SectionBody />
+                <SectionBody section='myDrive' folders={this.props.folders} />
             </Fragment>
         )
 

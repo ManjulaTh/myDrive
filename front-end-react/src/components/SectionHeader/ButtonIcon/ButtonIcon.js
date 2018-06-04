@@ -19,7 +19,7 @@ const ButtonIcon = props => {
     }
 
     return (
-        <IconButton aria-label={props.action}>
+        <IconButton md-18 aria-label={props.action}>
 
             {image}
         </IconButton>
