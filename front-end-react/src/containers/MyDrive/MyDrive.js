@@ -1,13 +1,31 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
+
+import SectionHeader from '../../components/SectionHeader/SectionHeader'
+import SectionBody from '../../components/SectionBody/SectionBody'
+
 
 class MyDrive extends Component {
+    state = {
+        buttonIcons: [
+            { action: 'Delete' },
+            { action: 'Download' }
+        ]
+    }
     render() {
+        let section = 'Loading...'
+
+
+        section = (
+            <Fragment>
+                <SectionHeader section='myDrive' buttonIcons={this.state.buttonIcons} />
+                <SectionBody />
+            </Fragment>
+        )
+
         return (
-            <div className="section">
-                <h1>Hello from My Drive</h1>
+            <div >
+                {section}
             </div>
-
-
         )
     }
 }

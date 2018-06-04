@@ -15,40 +15,42 @@ import Trash from './img/trash.jpg'
 class App extends Component {
   state = {
     links: [
-      { name: 'DriveStorage', url: '/', title: 'DriveStorage', image: StorageDrive },
+      { name: 'DriveStorage', url: '/', title: 'DriveStorage', image: StorageDrive, pillId: 'DriverStoragePill' },
       {
         name: 'New',
         dataToggle: 'modal',
         dataTarget: '#newModal',
         url: '#newModal',
         title: 'NEW',
-        image: New
+        image: New,
+        piiId: 'NewPill'
       },
-      { name: 'MyDrive', url: '/', title: 'My Drive', image: MyDrive },
-      { name: 'Trash', url: '/trash', title: 'Trash', image: Trash }
-    ],
-    modalButtons: [
-      { name: 'Folder' },
-      { name: 'File' }
+      { name: 'MyDrive', url: '/', title: 'My Drive', image: MyDrive, pillId: 'MyDrivePill' },
+      { name: 'Trash', url: '/trash', title: 'Trash', image: Trash, pillId: 'TrashPill' }
     ]
 
 
   }
+
   render() {
     return (
       <Fragment>
         <div className="container">
-          <div className="d-flex shadow p-3 ml-5 mr-5 bg-white rounded"
+          <div className="d-flex shadow p-3 ml-5 mr-5 bg-white"
             style={{ width: "90%", height: "700px" }}>
             <Navbar
-              links={Object.values(this.state.links)}
-            // buttons={Object.values(this.state.buttons)}
+              links={this.state.links}
             />
             <Modal />
             <Switch>
               {/* <Route path='/driveStorage' component={HomeContainer} /> */}
-              <Route path='/trash' component={TrashContainer} />
-              <Route path='/' component={MyDriveContainer} />
+              <Route
+                path='/trash'
+                render={() => <TrashContainer section='trash' />}
+              /><Route
+                path='/'
+                render={() => <MyDriveContainer section='myDrive' />}
+              />
             </Switch>
           </div>
         </div>

@@ -28,8 +28,9 @@ const NavPill = props => {
 
     return (
         // <section className={`${classes.rounded}`}>
-        <nav
-            className="nav nav-pills nav-justified font-weight-light d-inline-flex m-3 "
+        
+             <nav
+            className="nav nav-pills nav-fill nav-justified font-weight-light d-inline-flex m-3 "
             style={{ height: "50px", width: "150px" }}>
             <a className={cName}
                 // style={{ border }}
@@ -42,8 +43,9 @@ const NavPill = props => {
                 <img style={{ height: "30px", width: "30px" }} src={`${props.image}`} />
                 <h6 className="m-1 text-dark">{props.title}</h6>
             </a>
-        </nav>
-        // </section >
+        </nav> 
+      
+        //  </section >
     )
 }
 
