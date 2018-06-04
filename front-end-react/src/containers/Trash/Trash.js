@@ -12,16 +12,12 @@ class Trash extends Component {
     }
     render() {
         let section = 'Loading...'
-
-
         section = (
             <Fragment>
                 <SectionHeader section='trash' buttonIcons={this.state.buttonIcons} />
-
                 <SectionBody section='trash' folders={this.props.folders} />
             </Fragment>
         )
-
         return (
             <div >
                 {section}

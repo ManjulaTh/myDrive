@@ -16,17 +16,17 @@ const sectionBody = props => {
     {
         props.folders.map(folder => {
             if (folder.trash) {
-                trashFolders = { ...trashFolders, folder }
+                trashFolders = [{ ...trashFolders, folder }]
                 folder.files.map(file => {
-                    trashFiles = { ...trashFiles, file }
+                    trashFiles = [{ ...trashFiles, file }]
                 })
             } else {
-                myDriveFolders = { ...myDriveFolders, folder }
+                myDriveFolders = [{ ...myDriveFolders, folder }]
                 folder.files.map(file => {
                     if (file.trash) {
-                        trashFiles = { ...trashFiles, file }
+                        trashFiles = [{ ...trashFiles, file }]
                     } else {
-                        myDriveFiles = { ...myDriveFiles, file }
+                        myDriveFiles = [{ ...myDriveFiles, file }]
                     }
                 })
 
@@ -53,14 +53,14 @@ const sectionBody = props => {
 
     return (
         <section id='header-body'>
-            <h3> {folderTitle}</h3>
+            <p className="font font-weight-light"> {folderTitle}</p>
             <div id="FolderDiv">
                 {folders.map(folder => <FolderCard folderName={folder.folderName} />)}
             </div>
+            <p className="font font-weight-light">{fileTitle}</p>
             <div id="FileDiv">
-                <h3>fileTitle</h3>
+                {files.map(file => <FileCard fileName={file.fileName} />)}
             </div>
-            {files.map(file => <FileCard fileName={file.fileName} />)}
         </section>
     )
 }

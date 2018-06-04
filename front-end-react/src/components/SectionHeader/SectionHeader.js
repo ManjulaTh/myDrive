@@ -26,7 +26,7 @@ const sectionHeader = props => {
         <div className="container mw-5">
             <nav className="navbar navbar-expand-lg container-fluid shadow-sm mb-2 mt-4 p-0 m-0 mw-5 bg-white rounded navbar-light bg-light">
                 <div className="d-fex flex-row">
-                    <h6 className="align-bottom font-weight-light p-0 m-0">{title}</h6>
+                    <p className=" font align-bottom font-weight-light p-0 m-0">{title}</p>
                 </div>
                 <div className="d-flex flex-row-reverse">
                     {props.buttonIcons.map(buttonIcon => (

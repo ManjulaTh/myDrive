@@ -1,13 +1,12 @@
 import React from 'react'
-import folderIcon from '@material-ui/icons/Folder'
-import Icon from '@material-ui/core/Icon';
+import folderImage from '../../../img/folder.png'
 
 const FolderCard = props => {
     return (
-        <div className="card-deck wrap d-flex justify-content-center " style={{ width: "200px", height: "20px" }}>
-            <div className="card">
-                <Icon md-18 aria-label='Folder'>{<folderIcon />}</Icon>/>
-                <h2>{props.folderName}</h2>
+        <div className="card-deck wrap " style={{ width: "150px", height: "35px" }}>
+            <div className="card d-flex justify-content-center">
+                <img className="card-img-center" style={{ width: "25px", height: "25px" }} src={folderImage} alt="Card image cap" />
+                <p className="font">{props.folderName}</p>
             </div>
         </div>
     )
