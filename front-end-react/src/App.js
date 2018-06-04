@@ -32,7 +32,7 @@ class App extends Component {
       {
         folderName: 'FolderName',
         folderId: '',
-        trash: false,
+        trash: true,
         files: [{
           fileName: 'FileName',
           fileId: '',
@@ -59,6 +59,7 @@ class App extends Component {
 
 
   render() {
+    { console.log(this.state.folders) }
     return (
       <Fragment>
         <div className="container">

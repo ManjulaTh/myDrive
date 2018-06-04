@@ -23,7 +23,7 @@ const sectionHeader = props => {
 
     return (
 
-        <div className="container mw-5">
+        <div className="container-fluid">
             <nav className="navbar navbar-expand-lg container-fluid shadow-sm mb-2 mt-4 p-0 m-0 mw-5 bg-white rounded navbar-light bg-light">
                 <div className="d-fex flex-row">
                     <p className=" font align-bottom font-weight-light p-0 m-0">{title}</p>
@@ -31,7 +31,8 @@ const sectionHeader = props => {
                 <div className="d-flex flex-row-reverse">
                     {props.buttonIcons.map(buttonIcon => (
                         <ButtonIcon
-                            section={buttonIcon.section}
+
+                            key={buttonIcon.section}
                             action={buttonIcon.action}
                             deleteIcon={<DeleteIcon />}
                             downloadIcon={<DownloadIcon />}

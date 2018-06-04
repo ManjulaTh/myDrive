@@ -13,20 +13,16 @@ class MyDrive extends Component {
     }
     render() {
         let section = 'Loading...'
-        { console.log() }
+        { console.log('from drive', this.props.folders) }
 
         section = (
-            <Fragment>
+            <div className="container-fluid">
                 <SectionHeader section='myDrive' buttonIcons={this.state.buttonIcons} />
                 <SectionBody section='myDrive' folders={this.props.folders} />
-            </Fragment>
-        )
-
-        return (
-            <div >
-                {section}
             </div>
         )
+        { console.log('hello', this.state.folders) }
+        return section
     }
 }
 

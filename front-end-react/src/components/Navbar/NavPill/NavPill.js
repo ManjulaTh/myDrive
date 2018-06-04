@@ -36,7 +36,6 @@ const NavPill = props => {
                 // style={{ border }}
                 style={{ borderRadius: "25px" }}
                 href={props.url}
-                exact
                 data-target={props.dataTarget}
                 data-toggle={props.dataToggle}
             >

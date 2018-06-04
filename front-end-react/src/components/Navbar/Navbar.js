@@ -11,6 +11,7 @@ class Navbar extends Component {
 
                             {this.props.links.map(link => (
                                 <NavPill
+                                    key={link.name}
                                     name={link.name}
                                     title={link.title}
                                     image={link.image}
