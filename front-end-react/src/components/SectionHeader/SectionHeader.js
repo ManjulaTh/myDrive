@@ -24,11 +24,11 @@ const sectionHeader = props => {
     return (
 
         <div className="container-fluid">
-            <nav className="navbar navbar-expand-lg container-fluid shadow-sm mb-2 mt-4 p-0 m-0 mw-5 bg-white rounded navbar-light bg-light">
-                <div className="d-fex flex-row">
+            <nav className="navbar navbar-expand-lg container-fluid shadow-sm mb-2 mt-4 p-0 m-0 mw-5 bg-white rounded navbar-light bg-light d-flex flex-row">
+                <div className="horizontal-navbar">
                     <p className=" font align-bottom font-weight-light p-0 m-0">{title}</p>
                 </div>
-                <div className="d-flex flex-row-reverse">
+                <div className="w-100 d-flex flex-row-reverse">
                     {props.buttonIcons.map(buttonIcon => (
                         <ButtonIcon
 

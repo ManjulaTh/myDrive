@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import FolderCard from './Cards/FoldeCard'
 import FileCard from './Cards/FileCard'
 
@@ -7,10 +7,10 @@ const sectionBody = props => {
     let fileTitle
     let folders
     let files
-    let myDriveFolders
-    let myDriveFiles
-    let trashFolders
-    let trashFiles
+    let myDriveFolders = []
+    let myDriveFiles = []
+    let trashFolders = []
+    let trashFiles = []
     let fileSection
     let folderSection
 
@@ -20,17 +20,17 @@ const sectionBody = props => {
 
             if (folder.trash) {
 
-                trashFolders = [{ ...trashFolders, folder }]
+                trashFolders = [...trashFolders, folder]
                 folder.files.map(file => {
-                    trashFiles = [{ ...trashFiles, file }]
+                    trashFiles = [...trashFiles, file]
                 })
             } else {
-                myDriveFolders = [{ ...myDriveFolders, folder }]
+                myDriveFolders = [...myDriveFolders, folder]
                 folder.files.map(file => {
                     if (file.trash) {
-                        trashFiles = [{ ...trashFiles, file }]
+                        trashFiles = [...trashFiles, file]
                     } else {
-                        myDriveFiles = [{ ...myDriveFiles, file }]
+                        myDriveFiles = [...myDriveFiles, file]
                     }
                 })
 
@@ -45,32 +45,36 @@ const sectionBody = props => {
         case 'trash':
             folderTitle = 'Deleted Folders'
             fileTitle = 'Deleted Files'
-            folders = typeof trashFolders !== 'undefined' && trashFolders ? trashFolders : []
-            files = typeof trashFiles !== 'undefined' && trashFiles ? trashFiles : []
+            folders = trashFolders
+            files = trashFiles
             break
         case 'myDrive':
             folderTitle = 'Folders'
             fileTitle = 'Files'
-            folders = typeof myDriveFolders !== 'undefined' && myDriveFolders ? myDriveFolders : []
-            files = typeof myDriveFiles !== 'undefined' && myDriveFiles ? myDriveFiles : []
+            folders = myDriveFolders
+            files = myDriveFiles
     }
     { console.log('files from_sec-body', myDriveFiles) }
 
     return (
-        <section id='header-body'>
-            <p className="font font-weight-light"> {folderTitle}</p>
-            <div id="FolderDiv">
-                <div className="card-deck mt-3 mb-5" style={{ width: "200px", height: "40px" }}>
-                    {folders.map(folder => <FolderCard key={folder.folder.folderName} folderName={folder.folder.folderName} />)}
+        <Fragment>
+            <section className="section-folder-body ">
+                <p className="font font-weight-light"> {folderTitle}</p>
+                <div id="FolderDiv d-flex align-items-start flex-row " style={{ width: "100%" }}>
+                    <div className="card-deck mt-3 mb-5 d-flex align-items-start flex-row" style={{ width: "100%", height: "40px" }}>
+                        {folders.map(folder => <FolderCard key={folder.folderName} folderName={folder.folderName} />)}
+                    </div>
                 </div>
-            </div>
-            <p className="font font-weight-light">{fileTitle}</p>
-            <div id="FileDiv d-flex fex-row">
-                <div className="card-deck wrap d-flex flex-row justify-content-left mt-3" style={{ width: "150px", height: "140px" }}>
-                    {files.map(file => <FileCard key={file.file.fileName} fileName={file.file.fileName} />)}
+            </section>
+            <section className="section-folder-body ">
+                <p className="font font-weight-light">{fileTitle}</p>
+                <div id="FileDiv d-flex align-items-start flex-row" style={{ width: "100%" }}>
+                    <div className="card-deck  mt-3 d-flex align-items-start flex-row" style={{ width: "100%", height: "130px" }}>
+                        {files.map(file => <FileCard key={file.fileName} fileName={file.fileName} />)}
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </Fragment>
     )
 }
 export default sectionBody
