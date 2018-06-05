@@ -9,9 +9,12 @@ import Typography from "@material-ui/core/Typography"
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = {
-    cardAction: {
+    root: {
         display: 'block',
-        textAlign: 'center'
+        textAlign: 'center',
+        '&$selected': {
+            background: 'primary'
+        }
     },
     cardContent: {
 
@@ -27,6 +30,7 @@ const styles = {
         marginTop: '10px',
         marginRight: '20px',
         padding: '0px'
+
     },
     cover: {
         minwidth: '25px',
@@ -36,7 +40,8 @@ const styles = {
         display: 'flex',
         wrap: 'wrap',
         width: '100px'
-    }
+    },
+
 }
 
 const FolderCard = props => {
@@ -45,7 +50,11 @@ const FolderCard = props => {
         <div className="grid" layout="horizontal" layout-align="center center">
             <Card className={classes.card} raised="true">
                 <ButtonBase
-                    className={classes.cardAction}
+                    classes={{
+                        root: styles.root, // class name, e.g. `classes-state-root-x`
+                        disabled: classes.disabled, // class name, e.g. `classes-state-disabled-x`
+                    }}
+
                 //   onClick={event => { ... }}
                 >
 
