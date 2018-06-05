@@ -34,10 +34,11 @@ public class FolderService {
 	public ResponseEntity<?> get(Long id) {
 		Optional<FolderEntity> folderOptional = folderRepository.findById(id);
 		if (folderOptional.isPresent()) {
+			FolderEntity folder = folderOptional.get();
 			List<FileEntity> fileList = new ArrayList<>();
 			Iterable<FileEntity> fileIterable = fileRepository.findAllByFolderId(id);
 			fileIterable.forEach(fileList::add);
-			return ResponseEntity.ok(fileList);
+			return ResponseEntity.ok(folder);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -52,10 +53,39 @@ public class FolderService {
 	public ResponseEntity<?> deleteFolder(Long id) {
 		Optional<FolderEntity> folderOptional = folderRepository.findById(id);
 		if (folderOptional.isPresent()) {
+			folderOptional.get().getFiles().iterator().forEachRemaining(file -> fileRepository.delete(file));
 			folderRepository.deleteById(id);
 			return ResponseEntity.ok(id);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	public ResponseEntity<?> addFileToFolder(Long folderId, Long fileId) {
+		Optional<FileEntity> fileOptional = fileRepository.findById(fileId);
+		Optional<FolderEntity> folderOptional = folderRepository.findById(folderId);
+		if (fileOptional.isPresent() && folderOptional.isPresent()) {
+			FileEntity file = fileOptional.get();
+			FolderEntity folder = folderOptional.get();
+			folder.getFiles().add(file);
+			folderRepository.save(folder);
+			return ResponseEntity.ok(folder);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	public ResponseEntity<?> removeFileFromFolder(Long folderId, Long fileId) {
+		Optional<FileEntity> fileOptional = fileRepository.findById(fileId);
+		Optional<FolderEntity> folderOptional = folderRepository.findById(folderId);
+		if (fileOptional.isPresent() && folderOptional.isPresent()) {
+			FileEntity file = fileOptional.get();
+			FolderEntity folder = folderOptional.get();
+			folder.getFiles().remove(file);
+			folderRepository.save(folder);
+			return ResponseEntity.ok(folder);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 }

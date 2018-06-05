@@ -71,10 +71,10 @@ class App extends Component {
   }
 
   folderUploadHandler = () => {
-    console.log('It was click.')
-    console.log(this.state.selectedFolderNameUpload)
     if (this.state.selectedFolderNameUpload) {
-      axios.post('http://localhost:8080/api/folders/create', this.state.selectedFolderNameUpload)
+      const formData = new FormData()
+      formData.append('name', this.state.selectedFolderNameUpload)
+      axios.post('http://localhost:8080/api/folders/create', formData)
         .then(response => {
           this.folderNameInput.value = null
           this.setState({
@@ -129,6 +129,17 @@ class App extends Component {
       })
   }
 
+  addFileToFolder = (fileId, folderId) => {
+    if (this.state.selectedFolderNameUpload) {
+      const formData = new FormData()
+      formData.append('fileId', )
+      axios.put(`http://localhost:8080/api/folders/update/${folderId}`, formData)
+        .then(response => {
+          // Do nothing.
+        })
+    }
+  }
+
   render() {
     return (
       <div className='App'>
@@ -142,7 +153,7 @@ class App extends Component {
         <br/>
         <Paper className='folderContainer'>
           <div className='folderUploadContainer' style={{ padding: '1em' }} >
-            <input type='text' placeholder='Folder Name' onChange={this.selectedFolderUploadHandler} ref={ ref => this.folderNameInput = ref }/>
+            <input type='text' placeholder='Folder Name' onChange={this.selectedFolderNameUpload} ref={ ref => this.folderNameInput = ref }/>
             <UploadIcon onClick={this.folderUploadHandler} />
           </div>
         </Paper>

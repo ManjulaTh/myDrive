@@ -13,6 +13,7 @@ import com.cooksys.mydrive.repository.FolderRepository;
 @Component
 public class InitialDataLoader {
 	
+	@SuppressWarnings("unused")
 	private FileRepository fileRepository;
 	private FolderRepository folderRepository;
 	
