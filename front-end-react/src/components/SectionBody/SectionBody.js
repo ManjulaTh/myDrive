@@ -45,40 +45,30 @@ const sectionBody = props => {
         case 'trash':
             folderTitle = 'Deleted Folders'
             fileTitle = 'Deleted Files'
-            folders = trashFolders
-            files = trashFiles
+            folders = typeof trashFolders !== 'undefined' && trashFolders ? trashFolders : []
+            files = typeof trashFiles !== 'undefined' && trashFiles ? trashFiles : []
             break
         case 'myDrive':
             folderTitle = 'Folders'
             fileTitle = 'Files'
-            folders = myDriveFolders
-            files = myDriveFiles
+            folders = typeof myDriveFolders !== 'undefined' && myDriveFolders ? myDriveFolders : []
+            files = typeof myDriveFiles !== 'undefined' && myDriveFiles ? myDriveFiles : []
     }
     { console.log('files from_sec-body', myDriveFiles) }
-    if (folders) {
-        folderSection = (
-            folders.map(folder => <FolderCard key={folder.folder.folderName} folderName={folder.folder.folderName} />)
-        )
-    }
-    if (files) {
-        fileSection = (
-            files.map(file => <FileCard key={file.file.fileName} fileName={file.file.fileName} />))
-    }
 
     return (
         <section id='header-body'>
             <p className="font font-weight-light"> {folderTitle}</p>
             <div id="FolderDiv">
-                {folderSection}
+                <div className="card-deck mt-3 mb-5" style={{ width: "200px", height: "40px" }}>
+                    {folders.map(folder => <FolderCard key={folder.folder.folderName} folderName={folder.folder.folderName} />)}
+                </div>
             </div>
             <p className="font font-weight-light">{fileTitle}</p>
             <div id="FileDiv d-flex fex-row">
                 <div className="card-deck wrap d-flex flex-row justify-content-left mt-3" style={{ width: "150px", height: "140px" }}>
-
-                    {fileSection}
+                    {files.map(file => <FileCard key={file.file.fileName} fileName={file.file.fileName} />)}
                 </div>
-
-
             </div>
         </section>
     )
