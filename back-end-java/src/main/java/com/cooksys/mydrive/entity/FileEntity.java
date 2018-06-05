@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,15 +19,19 @@ public class FileEntity {
 	
 	private String mimetype;
 	
+	@ManyToOne
+	private FolderEntity folder;
+	
 	private byte[] content;
 	
 	private Boolean trash;
 	
 	public FileEntity() {}
 
-	public FileEntity(String name, String mimetype, byte[] content, Boolean trash) {
+	public FileEntity(String name, String mimetype, FolderEntity folder, byte[] content, Boolean trash) {
 		this.name = name;
 		this.mimetype = mimetype;
+		this.folder = folder;
 		this.content = content;
 		this.trash = trash;
 	}
@@ -54,6 +59,15 @@ public class FileEntity {
 
 	public void setMimetype(String mimetype) {
 		this.mimetype = mimetype;
+	}
+	
+	@JsonIgnore
+	public FolderEntity getFolder() {
+		return folder;
+	}
+	
+	public void setFolder(FolderEntity folder) {
+		this.folder = folder;
 	}
 
 	@JsonIgnore

@@ -36,8 +36,8 @@ public class FileController {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> createFile(@RequestParam MultipartFile file) {
-		return fileService.createFile(file);
+	public ResponseEntity<?> createFile(@RequestParam MultipartFile file, @RequestParam Long folderId) {
+		return fileService.createFile(file, folderId);
 	}
 	
 	@DeleteMapping("/{id}")
