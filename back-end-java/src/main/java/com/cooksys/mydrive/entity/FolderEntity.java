@@ -2,12 +2,11 @@ package com.cooksys.mydrive.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class FolderEntity {
@@ -18,7 +17,7 @@ public class FolderEntity {
 	
 	private String name;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FileEntity> files;
 	
 	private Boolean trash;
@@ -48,7 +47,7 @@ public class FolderEntity {
 		this.name = name;
 	}
 
-	@JsonIgnore
+//	@JsonIgnore
 	public List<FileEntity> getFiles() {
 		return files;
 	}

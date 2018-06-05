@@ -37,6 +37,7 @@ public class FolderController {
 	
 	@PostMapping("/create")
 	public ResponseEntity<?> createFolder(@RequestParam String name) {
+		System.out.println(name);
 		return folderService.createFolder(name);
 	}
 	
@@ -44,4 +45,6 @@ public class FolderController {
 	public ResponseEntity<?> deleteFolder(@PathVariable Long id) {
 		return folderService.deleteFolder(id);
 	}
+	
+	
 }

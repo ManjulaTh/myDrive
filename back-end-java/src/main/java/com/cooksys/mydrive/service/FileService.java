@@ -21,10 +21,12 @@ public class FileService {
 
 	private FileRepository fileRepository;
 	private FolderRepository folderRepository;
+	private FolderService folderService;
 	
-	public FileService(FileRepository fileRepository, FolderRepository folderRepository) {
+	public FileService(FileRepository fileRepository, FolderRepository folderRepository, FolderService folderService) {
 		this.fileRepository = fileRepository;
 		this.folderRepository = folderRepository;
+		this.folderService = folderService;
 	}
 
 	public ResponseEntity<?> getAll() {
@@ -55,6 +57,7 @@ public class FileService {
 				FolderEntity folder = folderOptional.get();
 				FileEntity fileTemp = new FileEntity(file.getOriginalFilename(), file.getContentType(), folder, file.getBytes(), false);
 				fileRepository.save(fileTemp);
+				folderService.addFileToFolder(folderId, fileTemp.getId());
 				return ResponseEntity.ok(fileTemp);
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -67,6 +70,7 @@ public class FileService {
 	public ResponseEntity<?> deleteFile(Long id) {
 		Optional<FileEntity> fileOptional = fileRepository.findById(id);
 		if (fileOptional.isPresent()) {
+			folderService.removeFileFromFolder(fileOptional.get().getFolder().getId(), fileOptional.get().getId());
 			fileRepository.deleteById(id);
 			return ResponseEntity.ok(id);
 		}
