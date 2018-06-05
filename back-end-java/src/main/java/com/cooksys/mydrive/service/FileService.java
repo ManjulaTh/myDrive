@@ -12,22 +12,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cooksys.mydrive.entity.FileEntity;
+import com.cooksys.mydrive.entity.FolderEntity;
 import com.cooksys.mydrive.repository.FileRepository;
+import com.cooksys.mydrive.repository.FolderRepository;
 
 @Service
 public class FileService {
 
 	private FileRepository fileRepository;
+	private FolderRepository folderRepository;
 	
-	public FileService(FileRepository fileRepository) {
+	public FileService(FileRepository fileRepository, FolderRepository folderRepository) {
 		this.fileRepository = fileRepository;
+		this.folderRepository = folderRepository;
 	}
 
 	public ResponseEntity<?> getAll() {
-		List<FileEntity> list = new ArrayList<>();
-		Iterable<FileEntity> files = fileRepository.findAll();
-		files.forEach(list::add);
-		return ResponseEntity.ok(list);
+		List<FileEntity> fileList = new ArrayList<>();
+		Iterable<FileEntity> fileIterable = fileRepository.findAll();
+		fileIterable.forEach(fileList::add);
+		return ResponseEntity.ok(fileList);
 	}
 
 	public ResponseEntity<byte[]> getFile(Long id) {
@@ -44,11 +48,17 @@ public class FileService {
 		}
 	}
 
-	public ResponseEntity<?> createFile(MultipartFile file) {
+	public ResponseEntity<?> createFile(MultipartFile file, Long folderId) {
 		try {
-			FileEntity fileTemp = new FileEntity(file.getOriginalFilename(), file.getContentType(), file.getBytes(), false);
-			fileRepository.save(fileTemp);
-			return ResponseEntity.ok(fileTemp);
+			Optional<FolderEntity> folderOptional = folderRepository.findById(folderId);
+			if (folderOptional.isPresent()) {
+				FolderEntity folder = folderOptional.get();
+				FileEntity fileTemp = new FileEntity(file.getOriginalFilename(), file.getContentType(), folder, file.getBytes(), false);
+				fileRepository.save(fileTemp);
+				return ResponseEntity.ok(fileTemp);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
