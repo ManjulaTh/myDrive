@@ -39,7 +39,7 @@ const sectionBody = props => {
         })
     }
 
-    { console.log('trashFolders', trashFolders) }
+    { console.log('from-body-Folders', myDriveFolders) }
 
     switch (props.section) {
         case 'trash':
