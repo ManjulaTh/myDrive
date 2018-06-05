@@ -1,29 +1,37 @@
-package com.cooksys.mydrive.model;
+package com.cooksys.mydrive.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class FileModel {
+public class FileEntity {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	private String name;
 	
 	private String mimetype;
 	
+	@ManyToOne
+	private FolderEntity folder;
+	
 	private byte[] content;
 	
 	private Boolean trash;
 	
-	public FileModel() {}
+	public FileEntity() {}
 
-	public FileModel(String name, String mimetype, byte[] content, Boolean trash) {
+	public FileEntity(String name, String mimetype, FolderEntity folder, byte[] content, Boolean trash) {
 		this.name = name;
 		this.mimetype = mimetype;
+		this.folder = folder;
 		this.content = content;
 		this.trash = trash;
 	}
@@ -44,6 +52,7 @@ public class FileModel {
 		this.name = name;
 	}
 
+	@JsonIgnore
 	public String getMimetype() {
 		return mimetype;
 	}
@@ -51,7 +60,17 @@ public class FileModel {
 	public void setMimetype(String mimetype) {
 		this.mimetype = mimetype;
 	}
+	
+	@JsonIgnore
+	public FolderEntity getFolder() {
+		return folder;
+	}
+	
+	public void setFolder(FolderEntity folder) {
+		this.folder = folder;
+	}
 
+	@JsonIgnore
 	public byte[] getContent() {
 		return content;
 	}
@@ -84,7 +103,7 @@ public class FileModel {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FileModel other = (FileModel) obj;
+		FileEntity other = (FileEntity) obj;
 		if (id != other.id)
 			return false;
 		return true;

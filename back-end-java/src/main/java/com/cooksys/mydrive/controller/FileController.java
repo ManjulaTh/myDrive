@@ -2,6 +2,7 @@ package com.cooksys.mydrive.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,13 +29,19 @@ public class FileController {
 		return fileService.getAll();
 	}
 	
+	@CrossOrigin(exposedHeaders = "content-disposition")
 	@GetMapping("/{id}")
 	public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
 		return fileService.getFile(id);
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> createFile(@RequestParam MultipartFile file) {
-		return fileService.createFile(file);
+	public ResponseEntity<?> createFile(@RequestParam MultipartFile file, @RequestParam Long folderId) {
+		return fileService.createFile(file, folderId);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteFile(@PathVariable Long id) {
+		return fileService.deleteFile(id);
 	}
 }

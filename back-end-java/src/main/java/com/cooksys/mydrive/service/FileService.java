@@ -6,49 +6,71 @@ import java.util.Optional;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cooksys.mydrive.model.FileModel;
+import com.cooksys.mydrive.entity.FileEntity;
+import com.cooksys.mydrive.entity.FolderEntity;
 import com.cooksys.mydrive.repository.FileRepository;
+import com.cooksys.mydrive.repository.FolderRepository;
 
 @Service
 public class FileService {
 
 	private FileRepository fileRepository;
+	private FolderRepository folderRepository;
 	
-	public FileService(FileRepository fileRepository) {
+	public FileService(FileRepository fileRepository, FolderRepository folderRepository) {
 		this.fileRepository = fileRepository;
+		this.folderRepository = folderRepository;
 	}
 
 	public ResponseEntity<?> getAll() {
-		List<FileModel> list = new ArrayList<>();
-		Iterable<FileModel> files = fileRepository.findAll();
-		files.forEach(list::add);
-		return ResponseEntity.ok(list);
+		List<FileEntity> fileList = new ArrayList<>();
+		Iterable<FileEntity> fileIterable = fileRepository.findAll();
+		fileIterable.forEach(fileList::add);
+		return ResponseEntity.ok(fileList);
 	}
 
 	public ResponseEntity<byte[]> getFile(Long id) {
-		Optional<FileModel> fileOptional = fileRepository.findById(id);
+		Optional<FileEntity> fileOptional = fileRepository.findById(id);
 		if (fileOptional.isPresent()) {
-			FileModel file = fileOptional.get();
+			FileEntity file = fileOptional.get();
 			return ResponseEntity.ok()
 					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
+					.contentLength(file.getContent().length)
+					.contentType(MediaType.parseMediaType(file.getMimetype()))
 					.body(file.getContent());
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	public ResponseEntity<?> createFile(MultipartFile file) {
+	public ResponseEntity<?> createFile(MultipartFile file, Long folderId) {
 		try {
-			FileModel fileTemp = new FileModel(file.getOriginalFilename(), file.getContentType(), file.getBytes(), false);
-			fileRepository.save(fileTemp);
-			return ResponseEntity.ok(fileTemp.getId());
+			Optional<FolderEntity> folderOptional = folderRepository.findById(folderId);
+			if (folderOptional.isPresent()) {
+				FolderEntity folder = folderOptional.get();
+				FileEntity fileTemp = new FileEntity(file.getOriginalFilename(), file.getContentType(), folder, file.getBytes(), false);
+				fileRepository.save(fileTemp);
+				return ResponseEntity.ok(fileTemp);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	public ResponseEntity<?> deleteFile(Long id) {
+		Optional<FileEntity> fileOptional = fileRepository.findById(id);
+		if (fileOptional.isPresent()) {
+			fileRepository.deleteById(id);
+			return ResponseEntity.ok(id);
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 }
