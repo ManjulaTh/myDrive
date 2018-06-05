@@ -1,9 +1,9 @@
 package com.cooksys.mydrive.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.cooksys.mydrive.model.FileModel;
+import com.cooksys.mydrive.entity.FileEntity;
 
-public interface FileRepository extends CrudRepository<FileModel, Long> {
-
+public interface FileRepository extends JpaRepository<FileEntity, Long> {
+	Iterable<FileEntity> findAllByFolderId(Long FolderEntityId);
 }
