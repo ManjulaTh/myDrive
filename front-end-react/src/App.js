@@ -25,6 +25,7 @@ class App extends Component {
   componentDidMount() {
     axios.get('http://localhost:8080/api/folders/all')
       .then(response => {
+        console.log(response.data)
         this.setState({folders: response.data})
       })
 
@@ -56,7 +57,10 @@ class App extends Component {
     if (this.state.selectedFileUpload) {
       const formData = new FormData()
       formData.append('file', this.state.selectedFileUpload)
-      formData.append('folderId', this.state.selectedFolderFileIdUpload)
+      if (this.state.selectedFolderFileIdUpload !== '') {
+        formData.append('folderId', this.state.selectedFolderFileIdUpload)
+      }
+      console.log(this.state.selectedFolderFileIdUpload)
       axios.post('http://localhost:8080/api/files/create', formData, {
         'Content-Type': 'multipart/form-data'
       })
@@ -168,6 +172,7 @@ class App extends Component {
                 <TableRow>
                   <TableCell numeric>ID</TableCell>
                   <TableCell>Name</TableCell>
+                  <TableCell>Trash</TableCell>
                   <TableCell>Delete</TableCell>
                   <TableCell>Download</TableCell>
                 </TableRow>
@@ -181,6 +186,9 @@ class App extends Component {
                       </TableCell>
                       <TableCell>
                         {file.name}
+                      </TableCell>
+                      <TableCell>
+                        {file.trash.toString()}
                       </TableCell>
                       <TableCell>
                         <DeleteIcon onClick={() => this.fileDeleteHandler(file.id)}/>
@@ -204,6 +212,7 @@ class App extends Component {
                 <TableRow>
                   <TableCell numeric>ID</TableCell>
                   <TableCell>Name</TableCell>
+                  <TableCell>Trash</TableCell>
                   <TableCell>Delete</TableCell>
                 </TableRow>
               </TableHead>
@@ -216,6 +225,9 @@ class App extends Component {
                       </TableCell>
                       <TableCell>
                         {folder.name}
+                      </TableCell>
+                      <TableCell>
+                        {folder.trash.toString()}
                       </TableCell>
                       <TableCell>
                         <DeleteIcon onClick={() => this.folderDeleteHandler(folder.id)}/>

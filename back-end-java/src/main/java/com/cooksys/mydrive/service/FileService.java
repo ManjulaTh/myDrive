@@ -29,9 +29,12 @@ public class FileService {
 		this.folderService = folderService;
 	}
 
-	public ResponseEntity<?> getAll() {
+	public ResponseEntity<?> getAll(Boolean trash) {
+		if (trash == null) {
+			trash = false;
+		}
 		List<FileEntity> fileList = new ArrayList<>();
-		Iterable<FileEntity> fileIterable = fileRepository.findAll();
+		Iterable<FileEntity> fileIterable = fileRepository.findAllByTrash(trash);
 		fileIterable.forEach(fileList::add);
 		return ResponseEntity.ok(fileList);
 	}
@@ -50,18 +53,24 @@ public class FileService {
 		}
 	}
 
-	public ResponseEntity<?> createFile(MultipartFile file, Long folderId) {
+	public ResponseEntity<?> createFile(MultipartFile file, String folderId) {
+		Long correctFolderId = folderId == null || folderId.equals("null") ? null : Long.valueOf(folderId);
+		FolderEntity folder = null;
 		try {
-			Optional<FolderEntity> folderOptional = folderRepository.findById(folderId);
-			if (folderOptional.isPresent()) {
-				FolderEntity folder = folderOptional.get();
-				FileEntity fileTemp = new FileEntity(file.getOriginalFilename(), file.getContentType(), folder, file.getBytes(), false);
-				fileRepository.save(fileTemp);
-				folderService.addFileToFolder(folderId, fileTemp.getId());
-				return ResponseEntity.ok(fileTemp);
-			} else {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			if (correctFolderId != null) {
+				Optional<FolderEntity> folderOptional = folderRepository.findById(correctFolderId);
+				if (folderOptional.isPresent()) {
+					folder = folderOptional.get();
+				} else {
+					return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				}
 			}
+			FileEntity fileTemp = new FileEntity(file.getOriginalFilename(), file.getContentType(), folder, file.getBytes(), false);
+			fileRepository.save(fileTemp);
+			if (correctFolderId != null) {
+				folderService.addFileToFolder(correctFolderId, fileTemp.getId());
+			}
+			return ResponseEntity.ok(fileTemp);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -70,7 +79,10 @@ public class FileService {
 	public ResponseEntity<?> deleteFile(Long id) {
 		Optional<FileEntity> fileOptional = fileRepository.findById(id);
 		if (fileOptional.isPresent()) {
-			folderService.removeFileFromFolder(fileOptional.get().getFolder().getId(), fileOptional.get().getId());
+			FileEntity file = fileOptional.get();
+			if (file.getFolder() != null) {
+				folderService.removeFileFromFolder(file.getFolder().getId(), id);
+			}
 			fileRepository.deleteById(id);
 			return ResponseEntity.ok(id);
 		}
