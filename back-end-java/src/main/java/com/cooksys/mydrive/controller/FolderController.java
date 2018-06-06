@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,8 +27,8 @@ public class FolderController {
 	}
 	
 	@GetMapping("/all")
-	public ResponseEntity<?> getAll() {
-		return folderService.getAll();
+	public ResponseEntity<?> getAll(@RequestParam(required=false) Boolean trash) {
+		return folderService.getAll(trash);
 	}
 	
 	@GetMapping("/{id}")
@@ -37,11 +38,17 @@ public class FolderController {
 	
 	@PostMapping("/create")
 	public ResponseEntity<?> createFolder(@RequestParam String name) {
+		System.out.println(name);
 		return folderService.createFolder(name);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteFolder(@PathVariable Long id) {
 		return folderService.deleteFolder(id);
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateFolder(@PathVariable Long id, @RequestParam(required=false) String name, @RequestParam(required=false) Boolean trash) {
+		return folderService.updateFolder(id, name, trash);
 	}
 }
