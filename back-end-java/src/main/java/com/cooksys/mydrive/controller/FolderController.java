@@ -26,8 +26,8 @@ public class FolderController {
 	}
 	
 	@GetMapping("/all")
-	public ResponseEntity<?> getAll() {
-		return folderService.getAll();
+	public ResponseEntity<?> getAll(@RequestParam(required=false) Boolean trash) {
+		return folderService.getAll(trash);
 	}
 	
 	@GetMapping("/{id}")

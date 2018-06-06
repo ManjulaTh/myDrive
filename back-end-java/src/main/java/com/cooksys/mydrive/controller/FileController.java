@@ -25,8 +25,8 @@ public class FileController {
 	}
 	
 	@GetMapping("/all")
-	public ResponseEntity<?> getAll() {
-		return fileService.getAll();
+	public ResponseEntity<?> getAll(@RequestParam(required=false) Boolean trash) {
+		return fileService.getAll(trash);
 	}
 	
 	@CrossOrigin(exposedHeaders = "content-disposition")
@@ -36,7 +36,7 @@ public class FileController {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> createFile(@RequestParam MultipartFile file, @RequestParam Long folderId) {
+	public ResponseEntity<?> createFile(@RequestParam MultipartFile file, @RequestParam(required=false) String folderId) {
 		return fileService.createFile(file, folderId);
 	}
 	

@@ -24,9 +24,12 @@ public class FolderService {
 		this.folderRepository = folderRepository;
 	}
 
-	public ResponseEntity<?> getAll() {
+	public ResponseEntity<?> getAll(Boolean trash) {
+		if (trash == null) {
+			trash = false;
+		}
 		List<FolderEntity> folderList = new ArrayList<>();
-		Iterable<FolderEntity> folderIterable = folderRepository.findAll();
+		Iterable<FolderEntity> folderIterable = folderRepository.findAllByTrash(trash);
 		folderIterable.forEach(folderList::add);
 		return ResponseEntity.ok(folderList);
 	}
@@ -81,7 +84,7 @@ public class FolderService {
 			FileEntity file = fileOptional.get();
 			FolderEntity folder = folderOptional.get();
 			folder.getFiles().remove(file);
-			folderRepository.save(folder);
+			folderRepository.saveAndFlush(folder);
 			return ResponseEntity.ok(folder);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
