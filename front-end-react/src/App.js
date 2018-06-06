@@ -30,8 +30,10 @@ class App extends Component {
       { name: 'MyDrive', url: '/', title: 'My Drive', image: MyDrive, pillId: 'MyDrivePill' },
       { name: 'Trash', url: '/trash', title: 'Trash', image: Trash, pillId: 'TrashPill' }
     ],
-    folders: [],
-    files: [],
+    mydriveFolders: [],
+    mydriveFiles: [],
+    trashFolders: [],
+    trashFiles: [],
     // {
     //   folderId: '',
     //   folderName: 'FolderName',
@@ -53,24 +55,42 @@ class App extends Component {
     //   trash: true,
     // }
 
-    selectedFileUpload: null,
+    selectedFileUpload: '',
+    selectedFile: '',
     selectedFolderFileIdUpload: null,
-    selectedFolderNameUpload: null
+    selectedFolderNameUpload: null,
+    currentFolderId: 0,
+    currentFileId: null
   }
 
   componentDidMount() {
     axios.get('http://localhost:8080/api/folders/all')
       .then(response => {
-        console.log(response.data)
-        this.setState({ folders: response.data })
-        console.log(this.state.folders)
-        console.log(`state = ${this.state.folders}`)
+        this.setState({ mydriveFolders: response.data })
+        console.log(`state-mydriveFolders = ${this.state.mydriveFolders}`)
+      })
+    axios.get('http://localhost:8080/api/files/all')
+      .then(response => {
+        this.setState({ mydriveFiles: response.data })
+        console.log(`state-mydriveFiles = ${this.state.mydriveFiles}`)
+      })
+    axios.get('http://localhost:8080/api/folders/all?trash=true')
+      .then(response => {
+        this.setState({ trashFolders: response.data })
+        console.log(`state-trashFolders = ${this.state.trashFolders}`)
+      })
+    axios.get('http://localhost:8080/api/folders/all?trash=true')
+      .then(response => {
+        this.setState({ trashFiles: response.data })
+        console.log(`state-trashFiles = ${this.state.trashFiles}`)
       })
   }
 
   selectedFileUploadHandler = event => {
+    console.log('asjdlkfjlsdaknvlkdsjklvndslkjvlkdsjklv;nsdlk;j: ', event.target.files)
     this.setState({
-      selectedFileUpload: event.target.files[0]
+      selectedFileUpload: event.target.value,
+      selectedFile: event.target.files[0]
     })
   }
 
@@ -86,40 +106,56 @@ class App extends Component {
     })
   }
 
+  updateCurrentFolderId = id => {
+    this.setState({
+      currentFolderId: id
+    })
+  }
+
+  updateCurrentFileId = id => {
+    this.setState({
+      currentFileId: id
+    })
+  }
+
   fileUploadHandler = () => {
-    // if (this.state.selectedFileUpload) {
-    //   const formData = new FormData()
-    //   formData.append('file', this.state.selectedFileUpload)
-    //   formData.append('folderId', this.state.selectedFolderFileIdUpload)
-    //   axios.post('http://localhost:8080/api/files/create', formData, {
-    //     'Content-Type': 'multipart/form-data'
-    //   })
-    //     .then(response => {
-    //       this.fileInput.value = null
-    //       this.setState({
-    //         selectedFileUpload: null,
-    //         files: [...this.state.files, response.data]
-    //       })
-    //     })
-    // }
+    if (this.state.selectedFileUpload) {
+      const formData = new FormData()
+      formData.append('file', this.state.selectedFile)
+      if (this.state.currentFolderId !== 0) {
+        formData.append('folderId', this.state.currentFolderId)
+      }
+      axios.post('http://localhost:8080/api/files/create', formData, {
+        'Content-Type': 'multipart/form-data'
+      })
+        .then(response => {
+          this.fileInput.value = null
+          this.setState({
+            selectedFileUpload: '',
+            selectedFile: '',
+            files: [...this.state.files, response.data]
+          })
+        })
+    }
   }
 
   folderUploadHandler = () => {
-    // console.log('It was click.')
-    // console.log(this.state.selectedFolderNameUpload)
-    // if (this.state.selectedFolderNameUpload) {
-    //   axios.post('http://localhost:8080/api/folders/create', this.state.selectedFolderNameUpload)
-    //     .then(response => {
-    //       this.folderNameInput.value = null
-    //       this.setState({
-    //         selectedFolderNameUpload: null,
-    //         folders: [...this.state.folders, response.data]
-    //       })
-    //     })
-    // }
+    console.log(this.state.selectedFolderNameUpload)
+    if (this.state.selectedFolderNameUpload) {
+      let folder = { name: this.state.selectedFolderNameUpload }
+      console.log('Data about to be posted: ', folder)
+      axios.post('http://localhost:8080/api/folders/create?name=' + this.state.selectedFolderNameUpload, folder)
+        .then(response => {
+          this.folderNameInput.value = null
+          this.setState({
+            selectedFolderNameUpload: null,
+            folders: [...this.state.folders, response.data]
+          })
+        }).catch(err => console.log(err))
+    }
   }
   render() {
-    { console.log('from app', this.state.folders) }
+    { console.log('from App.js: ', this.state.mydriveFolders) }
     return (
       <Fragment>
         <div className="container">
@@ -129,20 +165,36 @@ class App extends Component {
               links={this.state.links}
             />
             <Modal
-            // newFolderClicked={this.modalCreateNewFolderHandler}
-            // newFileClicked={this.modalCreateNewFileHandler}
+              newFolderClicked={this.folderUploadHandler}
+              newFolderInputChanged={this.selectedFolderNameUpload}
+              inputValue={this.state.selectedFolderNameUpload}
+              newFileClicked={this.fileUploadHandler}
+              newFileInputChanged={this.selectedFileUploadHandler}
+              newFile={this.state.selectedFileUpload}
             />
             <Switch>
               {/* <Route path='/driveStorage' component={HomeContainer} /> */}
               <Route
                 path='/trash'
-                render={() => <TrashContainer folders={this.state.folders} />}
+                render={() =>
+                  <TrashContainer
+                    folders={this.state.trashFolders}
+                    files={this.state.trashFiles}
+                    folderClicked={id => this.updateCurrentFolderId(id)}
+                    fileClicked={id => this.updateCurrentFileId(id)}
+                  />}
               /><Route
                 path='/'
-                render={() => <MyDriveContainer folders={this.state.folders} />}
+                render={() =>
+                  <MyDriveContainer
+                    folders={this.state.mydriveFolders}
+                    files={this.state.mydriveFiles}
+                    folderClicked={id => this.updateCurrentFolderId(id)}
+                    fileClicked={id => this.updateCurrentFileId(id)}
+                  />}
               />
             </Switch>
-            <input type='number' />
+
           </div>
         </div>
       </Fragment>

@@ -51,13 +51,12 @@ const FolderCard = props => {
             <Card className={classes.card} raised="true">
                 <ButtonBase
                     classes={{
-                        root: styles.root, // class name, e.g. `classes-state-root-x`
-                        disabled: classes.disabled, // class name, e.g. `classes-state-disabled-x`
+                        root: styles.root,
+                        disabled: classes.disabled
                     }}
-
-                //   onClick={event => { ... }}
+                    onClick={props.clicked}
+                    onDoubleClick={props.doubleClicked}
                 >
-
                     <CardContent className={classes.cardContent}>
                         <div>
                             <img style={{ width: "25px", height: "25px" }} src={folderImage} alt="Card image cap" />

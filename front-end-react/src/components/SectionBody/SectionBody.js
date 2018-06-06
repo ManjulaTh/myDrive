@@ -5,56 +5,23 @@ import FileCard from './Cards/FileCard'
 const sectionBody = props => {
     let folderTitle
     let fileTitle
-    let folders
-    let files
-    let myDriveFolders = []
-    let myDriveFiles = []
-    let trashFolders = []
-    let trashFiles = []
-    let fileSection
-    let folderSection
+
+    let currentFileId
+    let currentFolderId
 
     { console.log('from sec-body', props.folders) }
-    {
-        props.folders.map(folder => {
-
-            if (folder.trash) {
-
-                trashFolders = [...trashFolders, folder]
-                folder.files.map(file => {
-                    trashFiles = [...trashFiles, file]
-                })
-            } else {
-                myDriveFolders = [...myDriveFolders, folder]
-                folder.files.map(file => {
-                    if (file.trash) {
-                        trashFiles = [...trashFiles, file]
-                    } else {
-                        myDriveFiles = [...myDriveFiles, file]
-                    }
-                })
-
-            }
-
-        })
-    }
-
-    { console.log('from-body-Folders', myDriveFolders) }
+    { console.log('from sec-body', props.files) }
 
     switch (props.section) {
         case 'trash':
             folderTitle = 'Deleted Folders'
             fileTitle = 'Deleted Files'
-            folders = trashFolders
-            files = trashFiles
             break
         case 'myDrive':
             folderTitle = 'Folders'
             fileTitle = 'Files'
-            folders = myDriveFolders
-            files = myDriveFiles
+
     }
-    { console.log('files from_sec-body', myDriveFiles) }
 
     return (
         <Fragment>
@@ -62,7 +29,14 @@ const sectionBody = props => {
                 <p className="font font-weight-light"> {folderTitle}</p>
                 <div id="FolderDiv d-flex align-items-start flex-row " style={{ width: "100%" }}>
                     <div className="card-deck mt-3 mb-5 d-flex align-items-start flex-row" style={{ width: "100%", height: "40px" }}>
-                        {folders.map(folder => <FolderCard key={folder.folderName} folderName={folder.folderName} />)}
+                        {props.folders.map(folder =>
+                            <FolderCard
+                                key={folder.name}
+                                folderName={folder.name}
+                                clicked={() => props.folderClicked(folder.id)}
+                                doubleClicked={() => props.folderDoubleClicked(folder.id, folder.name)}
+                            />
+                        )}
                     </div>
                 </div>
             </section>
@@ -70,7 +44,13 @@ const sectionBody = props => {
                 <p className="font font-weight-light">{fileTitle}</p>
                 <div id="FileDiv d-flex align-items-start flex-row" style={{ width: "100%" }}>
                     <div className="card-deck  mt-3 d-flex align-items-start flex-row" style={{ width: "100%", height: "130px" }}>
-                        {files.map(file => <FileCard key={file.fileName} fileName={file.fileName} />)}
+                        {props.files.map(file =>
+                            <FileCard
+                                key={file.name}
+                                fileName={file.name}
+                                clicked={() => props.fileClicked(file.id)}
+                            />
+                        )}
                     </div>
                 </div>
             </section>

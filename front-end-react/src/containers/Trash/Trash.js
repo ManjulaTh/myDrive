@@ -8,14 +8,26 @@ class Trash extends Component {
         buttonIcons: [
             { action: 'Delete', },
             { action: 'Restore' }
-        ]
+        ],
+        folders: [],
+        files: []
     }
+
     render() {
         let section = 'Loading...'
         section = (
             <div className="container-fluid">
-                <SectionHeader section='trash' buttonIcons={this.state.buttonIcons} />
-                <SectionBody section='trash' folders={this.props.folders} />
+                <SectionHeader
+                    section='trash'
+                    buttonIcons={this.state.buttonIcons}
+                />
+                <SectionBody
+                    section='trash'
+                    folders={this.props.folders}
+                    files={this.props.files}
+                    folderClicked={this.props.folderClicked}
+                    fileClicked={this.props.fileClicked}
+                />
             </div>
         )
         return section

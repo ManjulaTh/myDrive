@@ -29,8 +29,9 @@ const FileCard = props => {
         <Card className={props.classes.card} raised="true">
             <ButtonBase
                 className={props.classes.cardAction}
-            //   onClick={event => { ... }}
+                onClick={props.clicked}
             >
+
                 <CardContent className={props.classes.cardContent}>
                     <img className="card-img-top mb-1" style={{ width: "80px", height: "60px" }} src={fileIcon} alt="Card image cap" />
                     <p className="font">{props.fileName}</p>
