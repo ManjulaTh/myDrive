@@ -6,5 +6,5 @@ import com.cooksys.mydrive.entity.FileEntity;
 
 public interface FileRepository extends JpaRepository<FileEntity, Long> {
 	Iterable<FileEntity> findAllByFolderId(Long folderEntityId);
-	Iterable<FileEntity> findAllByTrash(Boolean trash);
+	Iterable<FileEntity> findAllByTrashAndFolderIdIsNull(Boolean trash);
 }

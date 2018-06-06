@@ -91,4 +91,26 @@ public class FolderService {
 		}
 	}
 
+	public ResponseEntity<?> updateFolder(Long id, String name, Boolean trash) {
+		
+		Optional<FolderEntity> folderOptional = folderRepository.findById(id);
+		
+		if (folderOptional.isPresent()) {
+			FolderEntity folder = folderOptional.get();
+			
+			if (name != null) {
+				folder.setName(name);
+			}
+			
+			if (trash != null) {
+				folder.setTrash(trash);
+				folder.getFiles().iterator().forEachRemaining(file -> file.setTrash(trash));
+			}
+			
+			folderRepository.save(folder);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+
 }

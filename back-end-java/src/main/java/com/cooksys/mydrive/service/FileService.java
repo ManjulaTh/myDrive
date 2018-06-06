@@ -34,7 +34,7 @@ public class FileService {
 			trash = false;
 		}
 		List<FileEntity> fileList = new ArrayList<>();
-		Iterable<FileEntity> fileIterable = fileRepository.findAllByTrash(trash);
+		Iterable<FileEntity> fileIterable = fileRepository.findAllByTrashAndFolderIdIsNull(trash);
 		fileIterable.forEach(fileList::add);
 		return ResponseEntity.ok(fileList);
 	}
@@ -86,6 +86,44 @@ public class FileService {
 			fileRepository.deleteById(id);
 			return ResponseEntity.ok(id);
 		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+
+	public ResponseEntity<?> updateFile(Long id, String name, String folderId, Boolean trash) {
+		Long correctFolderId = folderId == null || folderId.equals("null") ? null : Long.valueOf(folderId);
+		Optional<FileEntity> fileOptional = fileRepository.findById(id);
+		
+		if (fileOptional.isPresent()) {
+			FileEntity file = fileOptional.get();
+			
+			if (name != null) {
+				file.setName(name);
+			}
+			
+			if (folderId != null) {
+				FolderEntity currentFolder = file.getFolder();
+				if (currentFolder != null) {
+					folderService.removeFileFromFolder(currentFolder.getId(), id);
+				}
+				if (correctFolderId != 0) {
+					Optional<FolderEntity> folderOptional = folderRepository.findById(correctFolderId);
+					if (! folderOptional.isPresent()) {
+						return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+					}
+					folderService.addFileToFolder(correctFolderId, id);
+					file.setFolder(folderOptional.get());
+				} else {
+					file.setFolder(null);
+				}
+			}
+			
+			if (trash != null) {
+				file.setTrash(trash);
+			}
+			fileRepository.save(file);
+			return ResponseEntity.ok(file);
+		}
+		
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
